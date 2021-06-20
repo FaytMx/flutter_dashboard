@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 class BackgroundTwitter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-        child: Container(
+    return Container(
       decoration: buildBoxDecoration(),
       child: Container(
         constraints: BoxConstraints(maxWidth: 400),
@@ -18,7 +17,7 @@ class BackgroundTwitter extends StatelessWidget {
           ),
         ),
       ),
-    ));
+    );
   }
 
   BoxDecoration buildBoxDecoration() {
