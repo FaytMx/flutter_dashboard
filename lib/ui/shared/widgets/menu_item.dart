@@ -21,6 +21,7 @@ class MenuItem extends StatefulWidget {
 
 class _MenuItemState extends State<MenuItem> {
   bool isHovered = false;
+
   @override
   Widget build(BuildContext context) {
     return AnimatedContainer(
@@ -33,7 +34,7 @@ class _MenuItemState extends State<MenuItem> {
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          onTap: widget.isActive ? null : widget.onPressed(),
+          onTap: widget.isActive ? null : () => widget.onPressed(),
           child: Padding(
             padding: EdgeInsets.symmetric(
               horizontal: 30,
