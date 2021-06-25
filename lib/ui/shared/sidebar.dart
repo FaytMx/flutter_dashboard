@@ -1,4 +1,6 @@
 import 'package:admin_dashboard/providers/side_menu_provider.dart';
+import 'package:admin_dashboard/router/router.dart';
+import 'package:admin_dashboard/services/navigation_service.dart';
 import 'package:admin_dashboard/ui/shared/widgets/logo.dart';
 import 'package:admin_dashboard/ui/shared/widgets/menu_item.dart';
 import 'package:admin_dashboard/ui/shared/widgets/text_separator.dart';
@@ -6,6 +8,11 @@ import 'package:flutter/material.dart';
 
 class Sidebar extends StatelessWidget {
   const Sidebar({Key? key}) : super(key: key);
+
+  void navigateTo(String routeName) {
+    NavigationService.navigateTo(routeName);
+    SideMenuProvider.closeMenu();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +30,7 @@ class Sidebar extends StatelessWidget {
             text: 'Dashboard',
             icon: Icons.compass_calibration_outlined,
             isActive: false,
-            onPressed: () => SideMenuProvider.closeMenu(),
+            onPressed: () => navigateTo(Flurorouter.dashboardRoute),
           ),
           MenuItem(
             text: 'Orders',
@@ -67,7 +74,7 @@ class Sidebar extends StatelessWidget {
             text: 'Icons',
             icon: Icons.list_alt_outlined,
             isActive: false,
-            onPressed: () {},
+            onPressed: () => navigateTo(Flurorouter.iconsRoute),
           ),
           MenuItem(
             text: 'Marketing',
@@ -87,6 +94,8 @@ class Sidebar extends StatelessWidget {
             isActive: false,
             onPressed: () {},
           ),
+          SizedBox(height: 30),
+          TextSeparator(text: 'Exit'),
           MenuItem(
             text: 'Logout',
             icon: Icons.exit_to_app_outlined,
