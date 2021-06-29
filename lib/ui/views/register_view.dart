@@ -101,7 +101,7 @@ class RegisterView extends StatelessWidget {
 
                             authProvider.register(
                               registerFormProvider.email,
-                              registerFormProvider.email,
+                              registerFormProvider.password,
                               registerFormProvider.name,
                             );
                           },

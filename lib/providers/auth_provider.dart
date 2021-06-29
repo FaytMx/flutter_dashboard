@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 enum AuthStatus { checking, authenticated, notAuthenticated }
 
 class AuthProvider extends ChangeNotifier {
-  String? _token;
+  // String? _token;
   AuthStatus authStatus = AuthStatus.checking;
   Usuario? user;
 
@@ -18,13 +18,23 @@ class AuthProvider extends ChangeNotifier {
   }
 
   login(String email, String password) {
-    //TODO peticion HTTP
-    this._token = 'asdasdfasdasf345jkkj34h5jk34h5kj';
-    LocalStorage.prefs.setString('token', this._token!);
-    authStatus = AuthStatus.authenticated;
-    notifyListeners();
+    final data = {'correo': email, 'password': password};
 
-    NavigationService.replaceTo(Flurorouter.dashboardRoute);
+    CafeApi.post('/auth/login', data).then((json) {
+      print(json);
+
+      final authResponse = AuthResponse.fromMap(json);
+      this.user = authResponse.usuario;
+
+      authStatus = AuthStatus.authenticated;
+      LocalStorage.prefs.setString('token', authResponse.token);
+      NavigationService.replaceTo(Flurorouter.dashboardRoute);
+      CafeApi.configureDio();
+      notifyListeners();
+    }).catchError((e) {
+      print('Error en $e');
+      NotificationsService.showSnackbarError("Usuario/Password no validos");
+    });
   }
 
   register(String email, String password, String name) {
@@ -38,7 +48,7 @@ class AuthProvider extends ChangeNotifier {
       authStatus = AuthStatus.authenticated;
       LocalStorage.prefs.setString('token', authResponse.token);
       NavigationService.replaceTo(Flurorouter.dashboardRoute);
-
+      CafeApi.configureDio();
       notifyListeners();
     }).catchError((e) {
       print('Error en $e');
@@ -48,16 +58,34 @@ class AuthProvider extends ChangeNotifier {
 
   Future<bool> isAuthenticated() async {
     final token = LocalStorage.prefs.getString("token");
+
     if (token == null) {
       authStatus = AuthStatus.notAuthenticated;
       notifyListeners();
       return false;
     }
 
-    await Future.delayed(Duration(milliseconds: 1000));
+    try {
+      final res = await CafeApi.httpGet('/auth');
+      final authResponse = AuthResponse.fromMap(res);
+      LocalStorage.prefs.setString('token', authResponse.token);
 
-    authStatus = AuthStatus.authenticated;
+      this.user = authResponse.usuario;
+
+      authStatus = AuthStatus.authenticated;
+      notifyListeners();
+      return true;
+    } catch (e) {
+      print(e);
+      authStatus = AuthStatus.notAuthenticated;
+      notifyListeners();
+      return false;
+    }
+  }
+
+  logout() {
+    LocalStorage.prefs.remove("token");
+    authStatus = AuthStatus.notAuthenticated;
     notifyListeners();
-    return true;
   }
 }
