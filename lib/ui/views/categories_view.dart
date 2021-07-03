@@ -1,3 +1,4 @@
+import 'package:admin_dashboard/ui/modals/category_modal.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:admin_dashboard/datatables/categories_datasource.dart';
@@ -23,7 +24,10 @@ class _CategoriesViewState extends State<CategoriesView> {
 
   @override
   Widget build(BuildContext context) {
+    final categorias = Provider.of<CategoriesProvider>(context).categorias;
+
     return Container(
+      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       child: ListView(
         physics: ClampingScrollPhysics(),
         children: [
@@ -36,14 +40,24 @@ class _CategoriesViewState extends State<CategoriesView> {
               DataColumn(label: Text('Creado por')),
               DataColumn(label: Text('Acciones')),
             ],
-            source: CategoriesDTS(),
+            source: CategoriesDTS(categorias, context),
             header: Text(
               'Esta es la lista de todas las categorias disponibles.',
               maxLines: 2,
             ),
             actions: [
               CustomIconButton(
-                  onPressed: () {}, text: "Crear", icon: Icons.add_outlined)
+                  onPressed: () {
+                    showModalBottomSheet(
+                      backgroundColor: Colors.transparent,
+                      context: context,
+                      builder: (_) => CategoryModal(
+                        categoria: null,
+                      ),
+                    );
+                  },
+                  text: "Crear",
+                  icon: Icons.add_outlined)
             ],
             onRowsPerPageChanged: (value) {
               print(value);
