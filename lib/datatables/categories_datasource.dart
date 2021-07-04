@@ -1,5 +1,8 @@
-import 'package:admin_dashboard/models/category.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:admin_dashboard/models/category.dart';
+import 'package:admin_dashboard/providers/categories_provider.dart';
+import 'package:admin_dashboard/ui/modals/category_modal.dart';
 
 class CategoriesDTS extends DataTableSource {
   final List<Categoria> categorias;
@@ -18,7 +21,17 @@ class CategoriesDTS extends DataTableSource {
         DataCell(Text(categoria.usuario.nombre)),
         DataCell(Row(
           children: [
-            IconButton(onPressed: () {}, icon: Icon(Icons.edit_outlined)),
+            IconButton(
+                onPressed: () {
+                  showModalBottomSheet(
+                    backgroundColor: Colors.transparent,
+                    context: context,
+                    builder: (_) => CategoryModal(
+                      categoria: categoria,
+                    ),
+                  );
+                },
+                icon: Icon(Icons.edit_outlined)),
             IconButton(
               onPressed: () {
                 final dialog = AlertDialog(
@@ -31,7 +44,10 @@ class CategoriesDTS extends DataTableSource {
                         },
                         child: Text("No")),
                     TextButton(
-                        onPressed: () {
+                        onPressed: () async {
+                          await Provider.of<CategoriesProvider>(context,
+                                  listen: false)
+                              .deleteCategory(categoria.id);
                           Navigator.of(context).pop();
                         },
                         child: Text("Si, Borrar")),
