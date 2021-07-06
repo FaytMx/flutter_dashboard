@@ -71,7 +71,7 @@ class Sidebar extends StatelessWidget {
             text: 'Customers',
             icon: Icons.people_alt_outlined,
             isActive: false,
-            onPressed: () {},
+            onPressed: () => navigateTo(Flurorouter.usersRoute),
           ),
           SizedBox(height: 30),
           TextSeparator(text: 'Ui Elements'),

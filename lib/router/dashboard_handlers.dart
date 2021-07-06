@@ -1,6 +1,7 @@
 import 'package:admin_dashboard/router/router.dart';
 import 'package:admin_dashboard/ui/views/blank_view.dart';
 import 'package:admin_dashboard/ui/views/categories_view.dart';
+import 'package:admin_dashboard/ui/views/users_view.dart';
 import 'package:fluro/fluro.dart';
 import 'package:provider/provider.dart';
 import 'package:admin_dashboard/providers/side_menu_provider.dart';
@@ -50,6 +51,17 @@ class DashboardHandlers {
 
     if (authProvider.authStatus == AuthStatus.authenticated)
       return CategoriesView();
+    else
+      return LoginView();
+  });
+
+  static Handler users = new Handler(handlerFunc: (context, params) {
+    final authProvider = Provider.of<AuthProvider>(context!);
+    Provider.of<SideMenuProvider>(context, listen: false)
+        .setCurrentPageUrl(Flurorouter.categoriesRoute);
+
+    if (authProvider.authStatus == AuthStatus.authenticated)
+      return UsersView();
     else
       return LoginView();
   });
