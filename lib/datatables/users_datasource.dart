@@ -1,3 +1,4 @@
+import 'package:admin_dashboard/services/navigation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:admin_dashboard/models/usuario.dart';
 
@@ -21,7 +22,11 @@ class UsersDTS extends DataTableSource {
         DataCell(Text(user.nombre)),
         DataCell(Text(user.correo)),
         DataCell(Text(user.uid)),
-        DataCell(IconButton(onPressed: () {}, icon: Icon(Icons.edit_outlined))),
+        DataCell(IconButton(
+            onPressed: () {
+              NavigationService.replaceTo('/dashboard/users/${user.uid}');
+            },
+            icon: Icon(Icons.edit_outlined))),
       ],
     );
   }
