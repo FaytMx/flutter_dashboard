@@ -26,8 +26,8 @@ class CafeApi {
     try {
       final response = await _dio.post(path, data: formData);
       return response.data;
-    } catch (e) {
-      print(e);
+    } on DioError catch (e) {
+      print(e.response);
       throw ('Error en el Post');
     }
   }
@@ -37,9 +37,9 @@ class CafeApi {
     try {
       final response = await _dio.put(path, data: formData);
       return response.data;
-    } catch (e) {
+    } on DioError catch (e) {
       print(e);
-      throw ('Error en el Put');
+      throw ('Error en el Put $e');
     }
   }
 
